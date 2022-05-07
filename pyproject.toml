@@ -11,6 +11,7 @@ discord = "^1.7.3"
 Events = "^0.4"
 fuzzywuzzy = "^0.18.0"
 keepalive = "^0.5"
+python-Levenshtein = "^0.12.2"
 
 [tool.poetry.dev-dependencies]
 
