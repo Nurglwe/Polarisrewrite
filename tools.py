@@ -1,5 +1,10 @@
 import json,discord,os
 
+def addlink(*args):
+  a=[]
+  for m in args:
+    a.append("")
+
 def getjson(path):
   with open(path,"r") as f:
     return json.load(f)
@@ -23,7 +28,7 @@ class embedhandler:
     vals=list(args.values())
     for i in range(len(vals)):
       embed.add_field(name=keys[i],value=vals[i],inline=False)
-    if not(self.channel is None):
+    if not(self.sendto is None):
       await self.sendto.send(embed=embed)
 
 

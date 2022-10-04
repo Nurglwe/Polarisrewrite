@@ -1,9 +1,7 @@
-import keepalive
 #No touch above
 from better_profanity import profanity
 from discord.ext import commands
-import time,calendar,os,json,discord,requests,tools
-from fuzzywuzzy import fuzz
+import os,discord,tools
 profanity.load_censor_words_from_file("./storage/profanity.txt")
 intents = discord.Intents.all() # Imports all the Intents
 intents.members=True
@@ -61,15 +59,25 @@ async def on_member_remove(payload):
 async def on_message_delete(message):
   ato=tools.alltheobject(client)
   embed = tools.embedhandler("Deleted message",0x01031f,ato.delc,client)
-  await tools.embedhandler.sendembed(embed,{"Sent by:":str(message.author.name),"User ID:":str(message.author.id),"Message.ID":str(message.id),"Link:":"https://discordapp.com/channels/{}/{}/{}".format(message.guild.id,message.channel.id,message.id)})
+  await tools.embedhandler.sendembed(embed,{"Sent by:":str(message.author.name),"User ID:":str(message.author.id),"Message.ID":str(message.id),"Message contens:":message.content,"Link:":"https://discordapp.com/channels/{}/{}/{}".format(message.guild.id,message.channel.id,message.id)})
 
 @client.event
-async def on_raw_message_delete(payload):
-  embed = tools.embedhandler("Mass message deletion",0x000000,tools.alltheobject.guild,client)
-  await tools.embedhandler.sendembed(embed, {"Message IDs:":payload.message_ids,"Amount of messages:":len(payload.message_ids)})
+async def on_raw_message_delete(message):
+  ato = tools.alltheobject(client)
+  embed = tools.embedhandler("Old message deleted",0x000000,ato.delc,client)
+  await tools.embedhandler.sendembed(embed, {"Message ID:":message.message_id})
 
+@client.event
+async def on_raw_bulk_message_delete(payload):
+  ato = tools.alltheobject(client)
+  embed = tools.embedhandler("Mass message deletion",0x505050,ato.delc,client)
+  await tools.embedhandler.sendembed(embed, {"Message IDs:":payload.message_ids,"Amount of messages:":len(payload.message_ids)}  )
 
-
+@client.event
+async def on_message_edit(mb,ma):
+  ato = tools.alltheobject(client)
+  embed = tools.embedhandler("Edited message",0xFF5400,ato.delc,client)
+  await tools.embedhandler.sendembed(embed,{"Message before content:":mb.content,"Message after contents:":ma.contents, "Message ID:":ma.id,"Author:":ma.author.name,"Message author ID":ma.author.id})
 
 
 token=os.getenv("TOKEN")    
